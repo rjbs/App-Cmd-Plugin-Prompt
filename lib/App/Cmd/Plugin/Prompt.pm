@@ -5,7 +5,35 @@ use App::Cmd::Setup -plugin => {
   exports => [ qw(prompt_str prompt_yn prompt_any_key) ],
 };
 
+our $VERSION = '1.000';
+
 use Term::ReadKey;
+
+=head1 NAME
+
+App::Cmd::Plugin::Prompt - plug prompting routines into your commands
+
+=head1 SYNOPSIS
+
+In your app:
+
+  package MyApp;
+  use App::Cmd::Setup -app => {
+    plugins => [ qw(App::Cmd::Plugin::Prompt) ],
+  };
+
+In your command:
+
+  package MyApp::Command::dostuff;
+  use MyApp -command;
+
+  sub run {
+    my ($self, $opt, $args) = @_;
+
+    return unless prompt_yn('really do stuff?', { default => 1 });
+
+    ...
+  }
 
 =head1 SUBROUTINES
 
@@ -111,14 +139,19 @@ Valid options are:
 sub prompt_yn {
   my ($plugin, $cmd, $message, $opt) = @_;
 
-  Carp::croak("default must be y or n")
-    if $opt->{default}
-    and $opt->{default} ne 'y'
-    and $opt->{default} ne 'n';
+  Carp::croak("default must be y or n or 0 or 1")
+    if defined $opt->{default}
+    and $opt->{default} !~ /\A[yn01]\z/;
 
   my $choices = (not defined $opt->{default}) ? 'y/n'
               : $opt->{default} eq 'y'        ? 'Y/n'
+              : $opt->{default} eq 'n'        ? 'y/N'
+              : $opt->{default}               ? 'Y/n'
               :                                 'y/N';
+
+  my $default = $opt->{default} =~ /\d/
+              ? ($opt->{default} ? 'y' : 'n')
+              : $opt->{default};
 
   my $response = $plugin->prompt_str(
     $cmd,
@@ -126,7 +159,7 @@ sub prompt_yn {
     {
       choices => $choices,
       valid   => sub { lc($_[0]) eq 'y' || lc($_[0]) eq 'n' },
-      %$opt,
+      default => $default,
     },
   );
 
@@ -152,5 +185,20 @@ sub prompt_any_key {
   Term::ReadKey::ReadMode 'normal';
   print "\n";
 }
+
+=head1 SEE ALSO
+
+L<App::Cmd>
+
+=head1 AUTHOR
+
+Ricardo SIGNES, C<< <rjbs@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2004-2006 Ricardo SIGNES.  This program is free software;  you can
+redistribute it and/or modify it under the same terms as Perl itself.
+
+=cut
 
 1;
