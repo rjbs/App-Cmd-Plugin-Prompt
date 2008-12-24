@@ -70,14 +70,20 @@ sub prompt_str {
     ) unless $opt->{valid}->($opt->{default});
   }
   $opt->{input}  ||= sub { scalar <STDIN> };
-  $opt->{output} ||= sub { printf "%s [%s]: ", @_ };
   $opt->{valid}  ||= sub { 1 };
+  $opt->{output} ||= sub {
+    if (defined $_[1]) {
+      printf "%s [%s]: ", @_;
+    } else {
+      printf "%s: ", $_[0];
+    }
+  };
 
   my $response;
   while (!defined($response) || !$opt->{valid}->($response)) {
     $opt->{output}->(
       $message,
-      ($opt->{choices} || $opt->{default} || ""),
+      ($opt->{choices} || $opt->{default} || undef),
     );
     $response = $opt->{input}->();
     chomp($response);
@@ -104,6 +110,7 @@ Valid options are:
 
 sub prompt_yn {
   my ($plugin, $cmd, $message, $opt) = @_;
+
   Carp::croak("default must be y or n")
     if $opt->{default}
     and $opt->{default} ne 'y'
@@ -113,7 +120,8 @@ sub prompt_yn {
               : $opt->{default} eq 'y'        ? 'Y/n'
               :                                 'y/N';
 
-  my $response = prompt_str(
+  my $response = $plugin->prompt_str(
+    $cmd,
     $message,
     {
       choices => $choices,
