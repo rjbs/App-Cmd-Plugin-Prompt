@@ -1,6 +1,11 @@
 use strict;
 use warnings;
 package App::Cmd::Plugin::Prompt;
+use App::Cmd::Setup -plugin => {
+  exports => [ qw(prompt_str prompt_yn prompt_any_key) ],
+};
+
+use Term::ReadKey;
 
 =head1 SUBROUTINES
 
@@ -58,12 +63,11 @@ coderef)
 =cut
 
 sub prompt_str {
-  my ($message, $opt) = @_;
+  my ($plugin, $cmd, $message, $opt) = @_;
   if ($opt->{default} && $opt->{valid} && ! $opt->{no_valid_default}) {
-    X::BadValue->throw(
-      $opt->{invalid_default_error} ||
-        "'default' must pass 'valid' parameter"
-      ) unless $opt->{valid}->($opt->{default});
+    Carp::croak(
+      $opt->{invalid_default_error} || "'default' must pass 'valid' parameter"
+    ) unless $opt->{valid}->($opt->{default});
   }
   $opt->{input}  ||= sub { scalar <STDIN> };
   $opt->{output} ||= sub { printf "%s [%s]: ", @_ };
@@ -99,8 +103,8 @@ Valid options are:
 =cut
 
 sub prompt_yn {
-  my ($message, $opt) = @_;
-  X::BadValue->throw("default must be y or n")
+  my ($plugin, $cmd, $message, $opt) = @_;
+  Carp::croak("default must be y or n")
     if $opt->{default}
     and $opt->{default} ne 'y'
     and $opt->{default} ne 'n';
@@ -131,7 +135,7 @@ supplied, is the text to prompt with.
 =cut
 
 sub prompt_any_key {
-  my ($prompt) = @_;
+  my ($plugin, $cmd, $prompt) = @_;
 
   $prompt ||= "press any key to continue";
   print $prompt;
