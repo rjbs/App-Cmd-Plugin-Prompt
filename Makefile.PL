@@ -7,4 +7,6 @@ requires('Term::ReadKey' => 0.00);  # minimum unknown
 
 auto_manifest;
 
+repository('http://github.com/rjbs/app-cmd-plugin-prompt');
+
 WriteAll();
