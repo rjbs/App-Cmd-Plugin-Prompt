@@ -1,4 +1,7 @@
 Release history for App-Cmd-Plugin-Prompt
 
+1.002     2009-08-10
+          avoid undef warning
+
 1.001     2009-01-16
           add repo to metadata
