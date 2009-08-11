@@ -149,7 +149,7 @@ sub prompt_yn {
               : $opt->{default}               ? 'Y/n'
               :                                 'y/N';
 
-  my $default = $opt->{default} =~ /\d/
+  my $default = ($opt->{default}||'') =~ /\A\d\z/
               ? ($opt->{default} ? 'y' : 'n')
               : $opt->{default};
 
