@@ -19,7 +19,7 @@ In your app:
 
   package MyApp;
   use App::Cmd::Setup -app => {
-    plugins => [ qw(App::Cmd::Plugin::Prompt) ],
+    plugins => [ qw(Prompt) ],
   };
 
 In your command:

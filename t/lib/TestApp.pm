@@ -5,7 +5,7 @@ use lib 'lib';
 
 package TestApp;
 use App::Cmd::Setup -app => {
-  plugins => [ qw(App::Cmd::Plugin::Prompt) ],
+  plugins => [ qw(Prompt) ],
 };
 
 1;
