@@ -1,5 +1,8 @@
 Release history for App-Cmd-Plugin-Prompt
 
+1.003     2010-04-25
+          fix docs to match prefix rewriting
+
 1.002     2009-08-10
           avoid undef warning
 
