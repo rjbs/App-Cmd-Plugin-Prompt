@@ -1,17 +1,12 @@
 use strict;
 use warnings;
 package App::Cmd::Plugin::Prompt;
+# ABSTRACT: plug prompting routines into your commands
 use App::Cmd::Setup -plugin => {
   exports => [ qw(prompt_str prompt_yn prompt_any_key) ],
 };
 
-our $VERSION = '1.003';
-
 use Term::ReadKey;
-
-=head1 NAME
-
-App::Cmd::Plugin::Prompt - plug prompting routines into your commands
 
 =head1 SYNOPSIS
 
@@ -189,15 +184,6 @@ sub prompt_any_key {
 =head1 SEE ALSO
 
 L<App::Cmd>
-
-=head1 AUTHOR
-
-Ricardo SIGNES, C<< <rjbs@cpan.org> >>
-
-=head1 COPYRIGHT
-
-Copyright 2004-2006 Ricardo SIGNES.  This program is free software;  you can
-redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut
 

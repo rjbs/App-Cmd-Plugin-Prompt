@@ -1,5 +1,8 @@
 Release history for App-Cmd-Plugin-Prompt
 
+{{$NEXT}}
+          update bug tracker
+
 1.003     2010-04-25
           fix docs to match prefix rewriting
 
