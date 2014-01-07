@@ -165,7 +165,7 @@ sub prompt_yn {
 
   my $input = prompt_any_key($prompt);
 
-This routine prompts the user to "press any key to continue."  (C<$prompt>, if
+This routine prompts the user to "press any key to continue."  C<$prompt>, if
 supplied, is the text to prompt with.
 
 =cut
