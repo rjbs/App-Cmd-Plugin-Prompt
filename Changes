@@ -1,6 +1,8 @@
 Release history for App-Cmd-Plugin-Prompt
 
 {{$NEXT}}
+
+1.006     2022-12-31 14:06:34-05:00 America/New_York
         - update packaging and metadata
         - minimum required Perl is now v5.12
 
